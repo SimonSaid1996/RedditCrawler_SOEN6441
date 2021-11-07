@@ -4,9 +4,9 @@
 
 	<h1>Welcome to RedditLytics!</h1>
   
-	<form action="/search?searchKey">
-	  <label for="searchkeyword">Searcg:</label><br>
-	  <input type="text" id="searchKey" name="searchKey" value="Enter you search query here!"><br>
+	<form method="get" onsubmit="getType(this)">
+	  <label for="searchkeyword">Search:</label><br>
+	  <input type="text" id="searchKey" name="searchKey" placeholder="Type here!"><br>
 	  <input type="submit" value="Submit">
 	</form> 
 	

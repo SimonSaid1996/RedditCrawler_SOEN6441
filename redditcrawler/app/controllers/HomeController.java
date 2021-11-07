@@ -1,7 +1,7 @@
 package controllers;
 import java.util.concurrent.CompletionStage;
 import play.mvc.*;
-
+import models.RedditSearch;
 
 public class HomeController extends Controller {
 
@@ -18,6 +18,7 @@ public class HomeController extends Controller {
      */
 	public Result search(String searchKey){
         System.out.println(searchKey);
+		RedditSearch.getlatestsubmissions(searchKey);
         return ok(views.html.homePage.render());
 		
     }
