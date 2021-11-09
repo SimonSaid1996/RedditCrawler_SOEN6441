@@ -1,0 +1,43 @@
+@(result:List[Reditsearch])
+
+@import models.Reditsearch
+@import models.SingleReddit
+@main("RedditLytics") {
+
+	<h1>Welcome to RedditLytics!</h1>
+  
+	<form method="get" onsubmit="getType(this)">
+	  <label for="searchkeyword">Search:</label><br>
+	  <input type="text" id="searchKey" name="searchKey" placeholder="Type here!"><br>
+	  <input type="submit" value="Submit">
+	</form>
+	@if(result!=null){
+
+		@for(r <- result) {
+			<table>
+				<tr >
+					<td>@r.getSearchKey</td>
+				</tr>
+				<tr >
+					<td>Auther</td>
+					<td>Title</td>
+					<td>Subredit</td>
+				</tr>
+
+				@for(l <- r.getResults) {
+					<tr>
+						<td>@l.getAuthor</td>
+						<td>@l.getTitle</td>
+						<td>@l.getSubreddit</td>
+					</tr>
+				}
+			</table>
+		} @* End category loop *@
+			<!-- Navigation Menu-->
+
+
+	}
+
+
+
+}

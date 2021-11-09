@@ -1,16 +1,16 @@
 package models;
 
-public class RedditSearch {
+public class SingleReddit {
 	
 	private String author;
 	private String subreddit;
 	private String title;
 	
-	public RedditSearch() {
+	public SingleReddit() {
 		
 	}
 	
-	public RedditSearch(String author, String subreddit, String title) {
+	public SingleReddit(String author, String subreddit, String title) {
 		this.author=author;
 		this.subreddit=subreddit;
 		this.title=title;
