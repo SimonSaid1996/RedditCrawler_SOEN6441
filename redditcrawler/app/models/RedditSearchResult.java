@@ -2,16 +2,17 @@ package models;
 
 import java.util.List;
 
-public class Reditsearch {
-    private String searchKey;
-    private List<SingleReddit> results;
+public class RedditSearchResult {
+    
+	private String searchKey;
+    private List<SingleSubmission> results;
 
 
     public String getSearchKey() {
         return searchKey;
     }
 
-    public List<SingleReddit> getResults() {
+    public List<SingleSubmission> getResults() {
         return results;
     }
 
@@ -19,7 +20,7 @@ public class Reditsearch {
         this.searchKey = searchKey;
     }
 
-    public void setResults(List<SingleReddit> results) {
+    public void setResults(List<SingleSubmission> results) {
         this.results = results;
     }
 

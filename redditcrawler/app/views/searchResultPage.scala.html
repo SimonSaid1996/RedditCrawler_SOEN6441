@@ -1,10 +1,13 @@
-@(result:List[Reditsearch])
+@(result:List[RedditSearchResult])
 
-@import models.Reditsearch
-@import models.SingleReddit
+@import models.RedditSearchResult
+@import models.SingleSubmission
 @main("RedditLytics") {
 
 	<h1>Welcome to RedditLytics!</h1>
+  
+	<form method='get' onload='getUser(this)'>
+	</form>
   
 	<form method="get" onsubmit="getType(this)">
 	  <label for="searchkeyword">Search:</label><br>

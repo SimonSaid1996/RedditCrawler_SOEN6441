@@ -1,16 +1,20 @@
 package models;
 
-public class SingleReddit {
+public class SingleSubmission {
 	
 	private String author;
 	private String subreddit;
 	private String title;
 	
-	public SingleReddit() {
+	private String authorLink;
+	private String subredditLink;
+	private String titleLink;
+	
+	public SingleSubmission() {
 		
 	}
 	
-	public SingleReddit(String author, String subreddit, String title) {
+	public SingleSubmission(String author, String subreddit, String title) {
 		this.author=author;
 		this.subreddit=subreddit;
 		this.title=title;
