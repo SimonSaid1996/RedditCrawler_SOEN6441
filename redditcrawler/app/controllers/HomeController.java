@@ -77,6 +77,20 @@ public class HomeController extends Controller {
         return ok(views.html.searchResultProfile.render(extractorthread.PartA_getProfileInfo(profileName)));
 
     }
+	
+	public Result PartC_subredditSearch(String Subreddit){
+	
+		/**
+		* Not taking in userid or searchkey
+		*user - it does not make sense to store it in cache (we would have to update if user clicks on the subreddit again), so no userid
+		*searchkey - as per requirements
+		*/
+
+        RedditExtractor extractorthread = new RedditExtractor();
+
+        return ok(views.html.searchResultSubreddit.render(extractorthread.PartC_getSubredditSubmissions(Subreddit)));
+
+    }
 
 }
 

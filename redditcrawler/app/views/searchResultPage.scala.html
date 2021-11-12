@@ -6,10 +6,6 @@
 
 	<h1>Welcome to RedditLytics!</h1>
   
-	<form method='get' onload='getUser(this)'>
-	</form>
-  
-
 	<form method="get" onsubmit="getType(this)">
 	  <label for="searchkeyword">Search:</label><br>
 	  <input type="text" id="searchKey" name="searchKey" placeholder="Type here!"><br>
@@ -31,14 +27,14 @@
 				<tr >
 					<td>Auther</td>
 					<td>Title</td>
-					<td>Subredit</td>
+					<td>Subreddit</td>
 				</tr>
 
 				@for(l <- r.getResults) {
 					<tr>
 						<td>@Html(l.getAuthor)</td>
 						<td>@l.getTitle</td>
-						<td>@l.getSubreddit</td>
+						<td>@Html(l.getSubreddit)</td>
 					</tr>
 				}
 			</table>

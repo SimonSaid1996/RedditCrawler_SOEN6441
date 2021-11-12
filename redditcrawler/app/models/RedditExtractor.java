@@ -59,6 +59,7 @@ public class RedditExtractor {
 		if (curUser.isThereaSameKey(this.searchKey)) {
 			curUser.remove(this.searchKey);
 		}
+		curUser.keepLatestTenResults();
 		curUser.appendCache(submissions);
 		
 		return CompletableFuture.supplyAsync(()->getApiResults(api));
@@ -106,7 +107,8 @@ public class RedditExtractor {
 			//System.out.println(i+"!!!"+author+"***"+subreddit+" +++ "+title);  //max to 99 searches
 		}
 		
-		result.getResults().parallelStream().forEach(r->r.setAuthor("<a href='/porfile/"+r.getAuthor()+"'>"+r.getAuthor()+"</a>"));
+		result.getResults().parallelStream().forEach(r->r.setAuthor("<a href='/profile/"+r.getAuthor()+"'>"+r.getAuthor()+"</a>"));
+		result.getResults().parallelStream().forEach(r->r.setSubreddit("<a href='/subreddit/"+r.getSubreddit()+"'>"+r.getSubreddit()+"</a>"));
 		
 		return result;
 	}
@@ -135,6 +137,25 @@ public class RedditExtractor {
 	
 	public static CompletableFuture<ArrayNode> getDistW(RedditSearchResult curRed){
 		return CompletableFuture.supplyAsync(()->new DistWordDesc().desDistWdCount( curRed));
+	}
+	
+	
+	//Yugansh's Individual task
+	public RedditSearchResult PartC_getSubredditSubmissions(String Subreddit){
+		try{
+			Subreddit = URLEncoder.encode(Subreddit,"UTF-8");
+		} catch(Exception e){
+			System.out.println(e);
+		}
+		
+		String api = "https://api.pushshift.io/reddit/search/submission/?subreddit="+Subreddit+"&size=10";
+
+		this.searchKey = "dummy";
+		
+		RedditSearchResult submissions = getApiResults(api);
+		
+		return submissions;
+
 	}
 	
 }

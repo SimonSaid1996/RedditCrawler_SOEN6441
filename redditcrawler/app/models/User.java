@@ -52,7 +52,14 @@ public class User {
 
 	//method to append new list to the hashtable
 	public void appendCache(RedditSearchResult w ){
-		cache.add(w);
+		cache.add(0, w);
+	}
+	
+	public void keepLatestTenResults(){
+		System.out.println(this.cache.size());
+		if(this.cache.size() == 10 ){
+			this.cache.remove(9);
+		}
 	}
 	
 	
