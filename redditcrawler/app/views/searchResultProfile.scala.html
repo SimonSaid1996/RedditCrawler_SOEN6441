@@ -1,0 +1,29 @@
+@(result:RedditSearchResult)
+
+@import models.RedditSearchResult
+@import models.SingleSubmission
+@main("RedditLytics") {
+
+
+    <h1>Welcome to Profile page!</h1>
+
+    @if(result != null) {
+        <table>
+            <tr >
+                <td>@result.getSearchKey</td>
+            </tr>
+            <tr >
+                <td>Title</td>
+                <td>Subredit</td>
+            </tr>
+
+            @for(l <- result.getResults) {
+                <tr>
+                    <td>@l.getTitle</td>
+                    <td>@l.getSubreddit</td>
+                </tr>
+            }
+        </table>
+    } @* End category loop *@
+        <!-- Navigation Menu-->
+}

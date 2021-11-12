@@ -3,6 +3,7 @@ package models;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class User {
     //user session, each person calling the browser, two browsers will have diff id, and cache
 	//also the place to store the prev searches
@@ -52,6 +53,23 @@ public class User {
 	//method to append new list to the hashtable
 	public void appendCache(RedditSearchResult w ){
 		cache.add(w);
+	}
+	
+	
+	
+	//Simon's individual part
+	public RedditSearchResult findKWordRed(String keyWord){
+		RedditSearchResult searchRes = null;
+		//System.out.println("key is "+keyWord);
+		for(int i = cache.size()-1;i>=0;i--){        //searching from the back to get the latest
+			RedditSearchResult red = cache.get(i);
+			//System.out.println("cur key is "+red.getSearchKey());
+			if(red.getSearchKey().equals(keyWord)){
+				//System.out.println("find key");
+				searchRes = red;
+			}
+		}
+		return searchRes;
 	}
 	
 }

@@ -17,3 +17,21 @@ function getType(form) {
 	
 	return form.action = absoluteUrl;
 }
+
+
+
+function getDistWord(form){
+	
+	const absoluteUrl = "http://localhost:9000";
+	
+	var guid = navigator.mimeTypes.length;
+	guid = guid + navigator.userAgent.replace(/\D+/g, '');
+    guid += navigator.plugins.length;
+	
+	if(guid) {
+		return form.action = absoluteUrl+"/DistW/"+guid;
+	}
+	
+	return form.action = absoluteUrl;
+
+}
