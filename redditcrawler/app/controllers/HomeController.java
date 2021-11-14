@@ -8,7 +8,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 
-
+//coverage 代码实在不红的话就写一行，改成绿的就行
 public class HomeController extends Controller {
     //testing case needs alt+space, then create the test cases, below web will explain     
 	//https://www.jetbrains.com/help/idea/create-tests.html
@@ -21,6 +21,14 @@ public class HomeController extends Controller {
         return ok(views.html.homePage.render());
     }
 	
+	
+	    /**
+     * Print out target user latest 10 tweets asynchronously with their name, picture and location.
+     * @author Ziran Cao and Yugansh Goyal
+     * @param args - A string containing the searchkey and the userId passed from main.js
+     * @return 10 newst reddit results, name, picture image, location
+     * @version v1
+     */
 	/**
      * Searching method for asynchronously get latest ...
      */
@@ -42,39 +50,49 @@ public class HomeController extends Controller {
 		
     }
 
-	
+	    /**
+     * a wrapper method to help rerendering the search method,no data changing here
+     * @author Ziran Cao
+     * @return rerendered version of the searched result page
+     */
 	public Result renderHelper(User user){
 		// a wrapper function to help rerender because required for lambda function to be used in thenapplysymc
 		return ok(views.html.searchResultPage.render(user.getCache()));
 	}
 
 
+//////////////////////start, modified the function and added comments, might need to modify the comments later after getting the searchkey by Yugansh
+    /**
+     * use a key word to retrieve 250 newest results and count the unique words in descending order
+     * @author Ziran Cao
+     * @param args - a variable from url which contains both userId and the searchKey
+     * @return a list of list<string> wrapped within the completionstage to finish processing
+     * @version v1
+     */
+
     //create a href link and link it to the routes, make my own part of function
     //public Result DistWord(){   //original
-    public CompletionStage<Result> DistWord( String userId ){
-        String searchKey = "trump";
-        //assuming "weather", "trump" results in the cache, find the trump results first in the cache and return lists
+    public CompletionStage<Result> DistWord( String searchKey ){
+        //String searchKey = "trump";
 
-        //use isthereakey in the user function to get all caches, then write a function to return all those reddits
-        //and put all those reddit list into the function to
-        //if searchkey the same, store that reditsearch
-		User user = Users.getUser(userId);
-        RedditSearchResult curRed = user.findKWordRed(searchKey);
+        //RedditSearchResult curRed = user.findKWordRed(searchKey);
+
         //System.out.println(curRed);
-
-        //return ok("dist");  //original
-        return  RedditExtractor.getDistW(curRed).thenApplyAsync(reds ->ok(reds));
-
+		RedditExtractor extractorthread = new RedditExtractor();
+		
+        return  extractorthread.getDistW(searchKey,250).thenApplyAsync(reds ->ok(views.html.searchResultDistWord.render(reds)));
     }
 	
-	public Result PartA(String profileName){
+	public CompletableFuture<Result> PartA(String profileName){
 
         //each search is gonna create a diff user here, think abt how to move the user to the session
 
         //if user is null, then do so
-        RedditExtractor extractorthread = new RedditExtractor();
+		//        RedditExtractor extractorthread = new RedditExtractor();
+		//        Profile profile = new Profile(profileName);
 
-        return ok(views.html.searchResultProfile.render(extractorthread.PartA_getProfileInfo(profileName)));
+
+        return new Profile(profileName).getData().thenApplyAsync(r->ok(views.html.searchResultProfile.render(r)));
 
     }
 	

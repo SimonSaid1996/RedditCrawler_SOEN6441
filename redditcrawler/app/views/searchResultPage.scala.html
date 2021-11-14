@@ -1,49 +1,45 @@
 @(result:List[RedditSearchResult])
 
-@import models.RedditSearchResult
-@import models.SingleSubmission
-@main("RedditLytics") {
+	@import models.RedditSearchResult
+	@import models.SingleSubmission
+	@main("RedditLytics") {
 
-	<h1>Welcome to RedditLytics!</h1>
-  
-	<form method="get" onsubmit="getType(this)">
-	  <label for="searchkeyword">Search:</label><br>
-	  <input type="text" id="searchKey" name="searchKey" placeholder="Type here!"><br>
-	  <input type="submit" value="Submit">
-	</form>
-	
-	@if(result!=null){
+	<div class="col-sm-12"><br></br></div>
+	<div class="col-sm-12">
+		<h1 class="heading-center" style=" text-align:center;">Welcome to RedditLytics! </h1>
+		<div class="col-sm-12"><br></br></div>
+	</div>
 
-		@for(r <- result) {
-			<table>
-				<tr> <td> 
-				<form method="get" onsubmit="getDistWord(this)">
-						<input type="submit" value="Display distinct words">
-				</form>
-				</td> <tr>
-				<tr >
-					<td><h2>@r.getSearchKey</h2></td>
-				</tr>
-				<tr >
-					<td>Auther</td>
-					<td>Title</td>
-					<td>Subreddit</td>
-				</tr>
+		@if(result!=null){
 
-				@for(l <- r.getResults) {
-					<tr>
-						<td>@Html(l.getAuthor)</td>
-						<td>@l.getTitle</td>
-						<td>@Html(l.getSubreddit)</td>
-					</tr>
-				}
-			</table>
-		} @* End category loop *@
-			<!-- Navigation Menu-->
+			@for(r <- result) {
+				<div class="col-sm-12-auto">
+					<table class="table table-striped table-light rounded ">
+						<thead class="thead-dark">
+							<th >#@(result.indexOf(r)+1)  Results of Search For: 
+							<a href="/DistW/@r.getSearchKey"> @r.getSearchKey </a></th>
+						</thead>
+						<thead class="thead-light">
+							<th scope="col">Auther</th>
+							<th scope="col">Title</th>
+							<th scope="col">Subreddit</th>
+
+						</thead>
 
 
+						@for(l <- r.getResults) {
+							<tr scope="row">
+								<td>@Html(l.getAuthor)</td>
+								<td>@l.getTitle</td>
+								<td>@Html(l.getSubreddit)</td>
+							</tr>
+						}
+					</table>
+					<div class="col-sm-12"><br></br></div>
+				</div>
+				 @* End category loop *@
+					<!-- Navigation Menu-->
+			}
+
+		}
 	}
-
-
-
-}

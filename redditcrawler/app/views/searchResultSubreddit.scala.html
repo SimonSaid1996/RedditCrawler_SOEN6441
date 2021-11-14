@@ -4,24 +4,33 @@
 @import models.SingleSubmission
 @main("RedditLytics") {
 
-    <h1>Welcome to Subreddit page!</h1>
+    <div class="col-sm-12"><br></br></div>
+    <div class="col-sm-12">
+        <h1 class="heading-center" style=" text-align:center;">Welcome to @Html(result.getResults.get(0).getSubreddit) Subreddit  page! </h1>
+        <div class="col-sm-12"><br></br></div>
+    </div>
+
 
     @if(result != null) {
-        <table>
-            <tr >
-				<td>Author</td>
-                <td>Title</td>
-                <td>Subredit</td>
-            </tr>
+        <div class="col-sm-auto">
+            <table class="table table-hover table-bordered ">
 
-            @for(l <- result.getResults) {
-                <tr>
-					<td>@Html(l.getAuthor)</td>
-					<td>@l.getTitle</td>
-					<td>@Html(l.getSubreddit)</td>
-                </tr>
-            }
-        </table>
-    } @* End category loop *@
-        <!-- Navigation Menu-->
+                <thead class="thead-dark">
+
+                    <th scope="col">Auther</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Subreddit</th>
+
+                </thead>
+
+                @for(l <- result.getResults) {
+                    <tr scope="row">
+                        <td>@Html(l.getAuthor)</td>
+                        <td>@l.getTitle</td>
+                        <td>@Html(l.getSubreddit)</td>
+                    </tr>
+                }
+            </table>
+        </div>
+    }
 }

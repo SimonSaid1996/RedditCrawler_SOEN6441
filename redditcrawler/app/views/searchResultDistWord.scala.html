@@ -1,0 +1,26 @@
+@(result:List[List[String]] )
+
+@import com.fasterxml.jackson.databind.node.ArrayNode;
+@import com.fasterxml.jackson.databind.node.ObjectNode;
+@main("RedditLytics") {
+
+    <h1>Welcome to Subreddit page!</h1>
+    @if(result != null) {
+        <table>
+            <tr >
+				<td>Word</td>
+                <td>Count</td>
+            </tr>
+
+            @for(l <- 0 to result.size()-1) {
+                <tr>
+                    <td>@Html(result.get(l).get(0))</td>
+                    <td>@Html(result.get(l).get(1))</td>
+                </tr>
+            }
+
+
+        </table>
+    } @* End category loop *@
+        <!-- Navigation Menu-->
+}

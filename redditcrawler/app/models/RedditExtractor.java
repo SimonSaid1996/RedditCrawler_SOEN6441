@@ -21,7 +21,7 @@ import static java.util.stream.Collectors.toList;
 
 
 public class RedditExtractor {
-	
+	public static boolean isTesting = false;
 	//executor for the api, will ge the search key and data for that search
 
 	public String searchKey;
@@ -37,7 +37,13 @@ public class RedditExtractor {
 	}
 	
 
-	
+	/**
+	 * Get latest 10 reddit search results asynchronously
+	 * @author 
+	 * @param searchKey a string representing the searchkey word
+	 * @return a finishing message, showing the operation is successful
+	 * @version v1
+	 */
 	//public void getLatestSubmissions(String searchKey){
 	public CompletableFuture<RedditSearchResult> getLatestSubmissions(String searchKey){
 		
@@ -54,11 +60,10 @@ public class RedditExtractor {
 		String api = "https://api.pushshift.io/reddit/search/submission/?q="+this.searchKey+"&size=10";
 
 		RedditSearchResult submissions = getApiResults(api);
-				
+
 		//to store the data on the cache with the user
-		if (curUser.isThereaSameKey(this.searchKey)) {
-			curUser.remove(this.searchKey);
-		}
+		curUser.removeOlderResult(this.searchKey);
+
 		curUser.keepLatestTenResults();
 		curUser.appendCache(submissions);
 		
@@ -135,8 +140,26 @@ public class RedditExtractor {
 	
 	//Simon individual's task
 	
-	public static CompletableFuture<ArrayNode> getDistW(RedditSearchResult curRed){
-		return CompletableFuture.supplyAsync(()->new DistWordDesc().desDistWdCount( curRed));
+	/**
+	 * Get distinct word count asynchronously
+	 * @author Ziran Cao
+	 * @param curRed current collection of redditSearch results based on one key word
+	 * @param count Number of reddits wanted to analysis
+	 * @return a list of list<string>, which contains the information of the distinct words and thier work counts
+	 * @version v1
+	 */
+
+	public CompletableFuture<List<List<String>>> getDistW(String searchKey, int count){
+		
+		this.searchKey=searchKey;
+		
+		try{
+				this.searchKey = URLEncoder.encode(this.searchKey,"UTF-8");
+		} catch(Exception e){
+				System.out.println(e);
+		}	
+		
+		return CompletableFuture.supplyAsync(()->new DistWordDesc().desDistWdCount( searchKey, count));
 	}
 	
 	

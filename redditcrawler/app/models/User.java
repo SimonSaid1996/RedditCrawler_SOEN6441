@@ -28,7 +28,7 @@ public class User {
 		this.cache = cache;
 	}
 
-
+	/*
 	public boolean isThereaSameKey(String key){
 		for(int i=0; i<this.cache.size();i++){
 			//System.out.println(key+"-");
@@ -39,7 +39,9 @@ public class User {
 		}
 		return false;
 	}
-	public void remove(String key){
+	*/
+	
+	public void removeOlderResult(String key){
 		for(int i=0; i<this.cache.size();i++){
 			//System.out.println(key+"-");
 			//System.out.println(cache.get(i).getSearchKey()+"-");
@@ -49,6 +51,7 @@ public class User {
 			}
 		}
 	}
+	
 
 	//method to append new list to the hashtable
 	public void appendCache(RedditSearchResult w ){
@@ -62,12 +65,13 @@ public class User {
 		}
 	}
 	
-	
-	
+
 	//Simon's individual part
+	/*
 	public RedditSearchResult findKWordRed(String keyWord){
 		RedditSearchResult searchRes = null;
-		//System.out.println("key is "+keyWord);
+		//need another search here to add the results
+
 		for(int i = cache.size()-1;i>=0;i--){        //searching from the back to get the latest
 			RedditSearchResult red = cache.get(i);
 			//System.out.println("cur key is "+red.getSearchKey());
@@ -78,5 +82,6 @@ public class User {
 		}
 		return searchRes;
 	}
+	*/
 	
 }

@@ -1,29 +1,72 @@
-@(result:RedditSearchResult)
+@(result:Profile)
 
-@import models.RedditSearchResult
-@import models.SingleSubmission
-@main("RedditLytics") {
+    @import models.RedditSearchResult
+    @import models.Profile
+    @import models.ProfileDetail
+    @main("RedditLytics") {
 
+    @*<div class="row">*@
+        @*<div class="col-lg-12 card-margin">*@
+            @*<div class="card search-form">*@
+                @*<div class="card-body p-0">*@
+                    @*<form id="search-form">*@
+                        @*<div class="row">*@
+                            @*<div class="col-12">*@
+                                @*<div class="row no-gutters">*@
+                                    @*<div class="col-lg-8 col-md-6 col-sm-12 p-0">*@
+                                        @*<input type="text" placeholder="Search..." class="form-control" id="search" name="search">*@
+                                    @*</div>*@
+                                    @*<div class="col-lg-1 col-md-3 col-sm-12 p-0">*@
+                                        @*<button type="submit" class="btn btn-base">*@
+                                            @*<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>*@
+                                        @*</button>*@
+                                    @*</div>*@
+                                @*</div>*@
+                            @*</div>*@
+                        @*</div>*@
+                    @*</form>*@
+                @*</div>*@
+            @*</div>*@
+        @*</div>*@
+    @*</div>*@
 
-    <h1>Welcome to Profile page!</h1>
+    <div class="col-sm-12"><br></br></div>
+    <div class="col-sm-12">
+        <h1 class="heading-center" style=" text-align:center;">Welcome to @Html(result.getAuthorInfoList.getName) Profile Detail page! </h1>
+        <div class="col-sm-12"><br></br></div>
+        <h3 class="heading-center" style=" text-align:center;">Author ID: @result.getAuthorInfoList.getId</h3>
+        @if(!result.getAuthorInfoList.getDescription.isEmpty) {
+            <h3 class="heading-center" style=" text-align: center;">Description: @result.getAuthorInfoList.getDescription</h3>
+        }
+        <h3 class="heading-center" style=" text-align:center;">Post Karma: @result.getAuthorInfoList.getPost_karma</h3>
+        <h3 class="heading-center" style=" text-align:center;">Comment Karma: @result.getAuthorInfoList.getComment_karma</h3>
+        <h3 class="heading-center" style=" text-align:center;">Awarder Karma: @result.getAuthorInfoList.getAwarder_karma</h3>
+        <h3 class="heading-center" style=" text-align:center;">Awardee Karma: @result.getAuthorInfoList.getAwardedee_karma</h3>
+        <h3 class="heading-center" style=" text-align:center;">Total Karma: @result.getAuthorInfoList.getTotal_karma</h3>
+        <h3 class="heading-center" style=" text-align:center;">Verfied: @result.getAuthorInfoList.getVerified</h3>
+        <div class="col-sm-12"><br></br></div>
+    </div>
 
-    @if(result != null) {
-        <table>
-            <tr >
-                <td>@result.getSearchKey</td>
-            </tr>
-            <tr >
-                <td>Title</td>
-                <td>Subredit</td>
-            </tr>
+        @if(result != null) {
+            <div class="col-sm-auto">
+                <h3>Last Ten Submissions:</h3>
+                <table class="table table-hover table-bordered ">
 
-            @for(l <- result.getResults) {
-                <tr>
-                    <td>@l.getTitle</td>
-					<td>@Html(l.getSubreddit)</td>
-                </tr>
-            }
-        </table>
-    } @* End category loop *@
-        <!-- Navigation Menu-->
-}
+                    <thead class="thead-dark">
+
+                        <th scope="col">Title</th>
+                        <th scope="col">Subreddit</th>
+
+                    </thead>
+
+                    @for(l <- result.getLastTenResult.getResults) {
+                        <tr scope="row">
+                            <td>@l.getTitle</td>
+                            <td>@Html(l.getSubreddit)</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        } @* End category loop *@
+            <!-- Navigation Menu-->
+    }
