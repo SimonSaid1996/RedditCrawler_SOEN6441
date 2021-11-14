@@ -44,7 +44,7 @@ public class RedditExtractor {
 	 * @return a finishing message, showing the operation is successful
 	 * @version v1
 	 */
-	//public void getLatestSubmissions(String searchKey){
+	//public CompletableFuture<String> getLatestSubmissions(String searchKey){
 	public CompletableFuture<RedditSearchResult> getLatestSubmissions(String searchKey){
 		
 		this.searchKey=searchKey;
@@ -67,6 +67,7 @@ public class RedditExtractor {
 		curUser.keepLatestTenResults();
 		curUser.appendCache(submissions);
 		
+		//return CompletableFuture.supplyAsync(()->"searching operation successful");
 		return CompletableFuture.supplyAsync(()->getApiResults(api));
 
 	}
@@ -74,17 +75,35 @@ public class RedditExtractor {
 	
 	public RedditSearchResult getApiResults(String api){
 		
-		HttpClient client = HttpClient.newHttpClient();
-		HttpRequest request = HttpRequest.newBuilder().uri(URI.create(api)).build();
-		RedditSearchResult submissions = client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-											.thenApply(HttpResponse::body)
-											.thenApply(this::parse)      
-											.join();
+		RedditSearchResult submissions= new RedditSearchResult();
+		
+		try{
+			HttpClient client = HttpClient.newHttpClient();
+			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(api)).build();
+			submissions = client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+								.thenApply(HttpResponse::body)
+								.thenApply(this::parse)      
+								.join();
+		} catch(Exception e){
+			submissions = this.getEmptyResults();
+		}
 				
 		return submissions;
 		
 	}
 
+	public RedditSearchResult getEmptyResults(){
+		
+		RedditSearchResult submissions= new RedditSearchResult();
+		
+		submissions.setSearchKey(this.searchKey);
+		List<SingleSubmission> searchResult = new ArrayList<>();
+		SingleSubmission singlesub = new SingleSubmission("", "", "", "");
+		searchResult.add(singlesub);
+		submissions.setResults(searchResult);
+		
+		return submissions;
+	}
 
 
 	public RedditSearchResult parse(String responseBody){
@@ -98,13 +117,30 @@ public class RedditExtractor {
 		JSONObject submissionObject = new JSONObject(responseBody);
         JSONArray submissions = submissionObject.getJSONArray("data");
 
+		/*
 		for(int i =0; i < submissions.length(); i++){
 			JSONObject submission = submissions.getJSONObject(i);
 			String author = submission.getString("author");
 			String subreddit = submission.getString("subreddit");
 			String title = submission.getString("title");
+			String submissionlink = submission.getString("full_link");
 			
-			SingleSubmission singlesub = new SingleSubmission(author, subreddit, title);
+			SingleSubmission singlesub = new SingleSubmission(author, subreddit, title, submissionlink);
+			searchResult.add(singlesub);
+			
+			result.setResults(searchResult);
+			
+			//System.out.println(i+"!!!"+author+"***"+subreddit+" +++ "+title);  //max to 99 searches
+		}*/
+		
+		for(int i =0; i < submissions.length(); i++){
+			JSONObject submission = submissions.getJSONObject(i);
+			String author = submission.getString("author");
+			String subreddit = submission.getString("subreddit");
+			String title = submission.getString("title");
+			String submissionlink = submission.getString("full_link");
+			
+			SingleSubmission singlesub = new SingleSubmission(author, subreddit, title, submissionlink);
 			searchResult.add(singlesub);
 			
 			result.setResults(searchResult);
@@ -118,24 +154,6 @@ public class RedditExtractor {
 		return result;
 	}
 	
-	
-	
-	
-	
-	//Pooya's Individual task
-	public RedditSearchResult PartA_getProfileInfo (String profileName){
-		try{
-			profileName = URLEncoder.encode(profileName,"UTF-8");
-		} catch(Exception e){
-			System.out.println(e);
-		}
-		String api = "https://api.pushshift.io/reddit/search/submission/?author="+profileName+"&fields=title,subreddit,author&size=10";
-
-		RedditSearchResult submissions = getApiResults(api);
-		
-		return submissions;
-
-	}
 	
 	
 	//Simon individual's task
@@ -164,7 +182,7 @@ public class RedditExtractor {
 	
 	
 	//Yugansh's Individual task
-	public RedditSearchResult PartC_getSubredditSubmissions(String Subreddit){
+	public CompletableFuture<RedditSearchResult> PartC_getSubredditSubmissions(String Subreddit){
 		try{
 			Subreddit = URLEncoder.encode(Subreddit,"UTF-8");
 		} catch(Exception e){
@@ -175,10 +193,12 @@ public class RedditExtractor {
 
 		this.searchKey = "dummy";
 		
-		RedditSearchResult submissions = getApiResults(api);
+		//RedditSearchResult submissions = getApiResults(api);
 		
-		return submissions;
+		return CompletableFuture.supplyAsync(()->getApiResults(api));
+		//return submissions;
 
 	}
+	
 	
 }

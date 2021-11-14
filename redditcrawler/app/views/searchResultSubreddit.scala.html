@@ -13,21 +13,20 @@
 
     @if(result != null) {
         <div class="col-sm-auto">
+			<h3>Latest 10 Submissions:</h3>
             <table class="table table-hover table-bordered ">
 
                 <thead class="thead-dark">
 
-                    <th scope="col">Auther</th>
+                    <th scope="col">Author</th>
                     <th scope="col">Title</th>
-                    <th scope="col">Subreddit</th>
 
                 </thead>
 
                 @for(l <- result.getResults) {
                     <tr scope="row">
                         <td>@Html(l.getAuthor)</td>
-                        <td>@l.getTitle</td>
-                        <td>@Html(l.getSubreddit)</td>
+						<td><a href="@l.getSubmissionLink" target="_blank"> @l.getTitle </a></td>
                     </tr>
                 }
             </table>

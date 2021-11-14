@@ -78,20 +78,31 @@ class HomeControllerTest {
      */
     @Test
     void distWord() {
-        CompletionStage<Result> result = new HomeController().DistWord("trump--guid250100646453736950463869537365");
+        CompletionStage<Result> result = new HomeController().DistWord("trump");
+        Result r = result.toCompletableFuture().join();
+        assertTrue(r.toString().length()>0);
+    }
+    /**
+     * testing the partA function with some key words
+     * @author Ziran Cao
+     * @version v1
+     */
+    @Test
+    void partA() {
+        CompletionStage<Result> result = new HomeController().PartA("TweetArchiveBot");
+        Result r = result.toCompletableFuture().join();
+        assertTrue(r.toString().length()>0);
+    }
+    /**
+     * testing the partc function with some key words
+     * @author Ziran Cao
+     * @version v1
+     */
+    @Test
+    void partC_subredditSearch() {   //for testing
+        CompletionStage<Result> result = new HomeController().PartC_subredditSearch("rosin");
         Result r = result.toCompletableFuture().join();
         assertTrue(r.toString().length()>0);
     }
 
-    @Test
-    void partA() {
-    }
-
-    @Test
-    void partC_subredditSearch() {
-    }
-
-    @Test
-    void testHomeScreen() {//??? do we really have this part?
-    }
 }

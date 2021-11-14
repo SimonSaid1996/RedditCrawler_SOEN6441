@@ -46,7 +46,7 @@ public class Profile {
         } catch(Exception e){
             System.out.println(e);
         }
-        String api = "https://api.pushshift.io/reddit/search/submission/?author="+profileName+"&fields=title,subreddit,author&size=10";
+        String api = "https://api.pushshift.io/reddit/search/submission/?author="+profileName+"&fields=title,subreddit,author,full_link&size=10";
 
         RedditExtractor lastTenResultExtractor=new RedditExtractor();
         lastTenResult = lastTenResultExtractor.getApiResults(api);

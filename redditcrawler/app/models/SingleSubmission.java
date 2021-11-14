@@ -6,18 +6,17 @@ public class SingleSubmission {
 	private String subreddit;
 	private String title;
 	
-	private String authorLink;
-	private String subredditLink;
-	private String titleLink;
+	private String submissionLink;
 	
 	public SingleSubmission() {
 		
 	}
 	
-	public SingleSubmission(String author, String subreddit, String title) {
+	public SingleSubmission(String author, String subreddit, String title, String submissionLink) {
 		this.author=author;
 		this.subreddit=subreddit;
 		this.title=title;
+		this.submissionLink=submissionLink;
 	}
 	
 	public String getAuthor() {
@@ -38,7 +37,12 @@ public class SingleSubmission {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
+	public String getSubmissionLink() {
+		return submissionLink;
+	}
+	public void setSubmissionLink(String submissionLink) {
+		this.submissionLink = submissionLink;
+	}	
 	
 
 }

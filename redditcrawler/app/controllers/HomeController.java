@@ -96,7 +96,7 @@ public class HomeController extends Controller {
 
     }
 	
-	public Result PartC_subredditSearch(String Subreddit){
+	public CompletableFuture<Result> PartC_subredditSearch(String Subreddit){
 	
 		/**
 		* Not taking in userid or searchkey
@@ -106,7 +106,8 @@ public class HomeController extends Controller {
 
         RedditExtractor extractorthread = new RedditExtractor();
 
-        return ok(views.html.searchResultSubreddit.render(extractorthread.PartC_getSubredditSubmissions(Subreddit)));
+        return extractorthread.PartC_getSubredditSubmissions(Subreddit).thenApplyAsync(results->ok(views.html.searchResultSubreddit.render(results)));
+        //return ok(views.html.searchResultSubreddit.render(extractorthread.PartC_getSubredditSubmissions(Subreddit)));
 
     }
 

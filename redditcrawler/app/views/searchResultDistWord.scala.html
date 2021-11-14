@@ -4,23 +4,31 @@
 @import com.fasterxml.jackson.databind.node.ObjectNode;
 @main("RedditLytics") {
 
-    <h1>Welcome to Subreddit page!</h1>
+    <div class="col-sm-12"><br></br></div>
+    <div class="col-sm-12">
+        <h1 class="heading-center" style=" text-align:center;">Welcome to Word-level Statistics page! </h1>
+        <div class="col-sm-12"><br></br></div>
+    </div>
     @if(result != null) {
-        <table>
-            <tr >
-				<td>Word</td>
-                <td>Count</td>
-            </tr>
 
-            @for(l <- 0 to result.size()-1) {
-                <tr>
-                    <td>@Html(result.get(l).get(0))</td>
-                    <td>@Html(result.get(l).get(1))</td>
-                </tr>
-            }
+        @*<div class="col-sm-12-auto">*@
+            <table class="table table-striped table-light rounded ">
 
+                <thead class="thead-light">
+                    <th scope="col">Word</th>
+                    <th scope="col">Count</th>
 
-        </table>
+                </thead>
+
+                @for(l <- 0 to result.size()-1) {
+                    <tr >
+                        <td>@result.get(l).get(0)</td>
+                        <td>@result.get(l).get(1)</td>
+                    </tr>
+                }
+
+            </table>
+        @*</div>*@
     } @* End category loop *@
         <!-- Navigation Menu-->
 }

@@ -71,14 +71,6 @@ class UserTest {
         assertTrue(us.getCache().size()>0);
 
     }
-    /**
-     * Tests isThereaSameKey function
-     * @author Ziran Cao
-     * @version v1
-     */
-    @Test
-    void isThereaSameKey() {
-    }
 
     /**
      * Tests remove function
@@ -86,7 +78,16 @@ class UserTest {
      * @version v1
      */
     @Test
-    void remove() {
+    void removeOlderResult() {
+        List<RedditSearchResult> test = new ArrayList<>();
+        RedditSearchResult r1 = new RedditSearchResult();
+        r1.setSearchKey("tea");
+        test.add(r1);
+        User u = new User();
+        u.setCache(test);
+        u.removeOlderResult("tea");
+        assertTrue(u.getCache().size()==0);
+
     }
 
     /*@Test
@@ -100,5 +101,30 @@ class UserTest {
      */
     @Test
     void keepLatestTenResults() {
+        User u = new User();
+        List<RedditSearchResult> test = new ArrayList<>();
+        RedditSearchResult r1 = new RedditSearchResult();
+        RedditSearchResult r2 = new RedditSearchResult();
+        RedditSearchResult r3 = new RedditSearchResult();
+        RedditSearchResult r4 = new RedditSearchResult();
+        RedditSearchResult r5 = new RedditSearchResult();
+        RedditSearchResult r6 = new RedditSearchResult();
+        RedditSearchResult r7 = new RedditSearchResult();
+        RedditSearchResult r8 = new RedditSearchResult();
+        RedditSearchResult r9 = new RedditSearchResult();
+        RedditSearchResult r10 = new RedditSearchResult();
+        test.add(r1);
+        test.add(r2);
+        test.add(r3);
+        test.add(r4);
+        test.add(r5);
+        test.add(r6);
+        test.add(r7);
+        test.add(r8);
+        test.add(r9);
+        test.add(r10);
+        u.setCache(test);
+        u.keepLatestTenResults();
+        assertTrue(u.getCache().size()>0);
     }
 }

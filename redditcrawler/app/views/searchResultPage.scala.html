@@ -20,7 +20,7 @@
 							<a href="/DistW/@r.getSearchKey"> @r.getSearchKey </a></th>
 						</thead>
 						<thead class="thead-light">
-							<th scope="col">Auther</th>
+							<th scope="col">Author</th>
 							<th scope="col">Title</th>
 							<th scope="col">Subreddit</th>
 
@@ -30,7 +30,7 @@
 						@for(l <- r.getResults) {
 							<tr scope="row">
 								<td>@Html(l.getAuthor)</td>
-								<td>@l.getTitle</td>
+								<td><a href="@l.getSubmissionLink" target="_blank"> @l.getTitle </a></td>
 								<td>@Html(l.getSubreddit)</td>
 							</tr>
 						}

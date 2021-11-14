@@ -49,7 +49,7 @@
 
         @if(result != null) {
             <div class="col-sm-auto">
-                <h3>Last Ten Submissions:</h3>
+                <h3>Latest 10 Submissions:</h3>
                 <table class="table table-hover table-bordered ">
 
                     <thead class="thead-dark">
@@ -61,7 +61,7 @@
 
                     @for(l <- result.getLastTenResult.getResults) {
                         <tr scope="row">
-                            <td>@l.getTitle</td>
+                            <td><a href="@l.getSubmissionLink" target="_blank"> @l.getTitle </a></td>
                             <td>@Html(l.getSubreddit)</td>
                         </tr>
                     }
