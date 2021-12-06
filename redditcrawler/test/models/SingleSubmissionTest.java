@@ -17,7 +17,7 @@ class SingleSubmissionTest {
      */
     @Test
     void getAuthor() {
-        SingleSubmission s = new SingleSubmission("a","b","c");
+            SingleSubmission s = new SingleSubmission("a","b","c","https://www.reddit.com/r/NBASpurs/comments/qu1lod/post_game_thread_regular_season_the_los_angeles/");
         assertEquals(s.getAuthor(),"a");
     }
     /**
@@ -27,7 +27,7 @@ class SingleSubmissionTest {
      */
     @Test
     void setAuthor() {
-        SingleSubmission s = new SingleSubmission("a","b","c");
+        SingleSubmission s = new SingleSubmission("a","b","c","https://www.reddit.com/r/NBASpurs/comments/qu1lod/post_game_thread_regular_season_the_los_angeles/");
         s.setAuthor("b");
         assertEquals(s.getAuthor(),"b");
 
@@ -39,7 +39,7 @@ class SingleSubmissionTest {
      */
     @Test
     void getSubreddit() {
-        SingleSubmission s = new SingleSubmission("a","bb","c");
+        SingleSubmission s = new SingleSubmission("a","bb","c","https://www.reddit.com/r/NBASpurs/comments/qu1lod/post_game_thread_regular_season_the_los_angeles/");
         assertEquals(s.getSubreddit(),"bb");
     }
     /**
@@ -75,5 +75,26 @@ class SingleSubmissionTest {
         SingleSubmission s = new SingleSubmission();
         s.setTitle("b");
         assertTrue(s.getTitle().length()>0);
+    }
+    /**
+     * test settitle function
+     * @author Ziran Cao
+     * @version v1
+     */
+    @Test
+    void getSubmissionLink() {
+        SingleSubmission s = new SingleSubmission("a","bb","c","https://www.reddit.com/r/NBASpurs/comments/qu1lod/post_game_thread_regular_season_the_los_angeles/");
+        assertEquals(s.getSubmissionLink(),"https://www.reddit.com/r/NBASpurs/comments/qu1lod/post_game_thread_regular_season_the_los_angeles/");
+    }
+    /**
+     * test settitle function
+     * @author Ziran Cao
+     * @version v1
+     */
+    @Test
+    void setSubmissionLink() {
+        SingleSubmission s = new SingleSubmission();
+        s.setSubmissionLink("https://www.reddit.com/r/NBASpurs/comments/qu1lod/post_game_thread_regular_season_the_los_angeles/");
+        assertEquals(s.getSubmissionLink(),"https://www.reddit.com/r/NBASpurs/comments/qu1lod/post_game_thread_regular_season_the_los_angeles/");
     }
 }

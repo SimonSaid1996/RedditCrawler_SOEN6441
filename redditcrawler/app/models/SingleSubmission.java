@@ -1,6 +1,12 @@
 package models;
 
-public class SingleSubmission {
+import Interface.SingleSubInter;
+
+/**
+ * A model class representing the results of a single submission
+ * @author Yugansh Goyal
+ */
+public class SingleSubmission implements SingleSubInter {
 	
 	private String author;
 	private String subreddit;

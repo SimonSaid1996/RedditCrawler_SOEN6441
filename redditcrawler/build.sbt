@@ -10,3 +10,6 @@ scalaVersion := "2.13.6"
 libraryDependencies += guice
 
 libraryDependencies += "org.json" % "json" % "20210307"
+
+val AkkaVersion = "2.6.14"
+libraryDependencies += "com.typesafe.akka" %% "akka-testkit" % AkkaVersion % Test

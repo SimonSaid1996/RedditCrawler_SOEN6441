@@ -1,28 +1,67 @@
 package models;
 
-import com.fasterxml.jackson.databind.node.ArrayNode;
+import InjectingWrapper.RedditExtractorWrapper;
+import Interface.ProfileInter;
+import Interface.RedditExtraInter;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import Interface.DistWordDescInter;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
  * q class to get an list of distinctword descending and their corresponding number count
  * @author Ziran Cao
  * @version v1
  */
-class DistWordDescTest {
+public class DistWordDescTest {
+
+    private Injector injector;
+    //can't use injector because of the versionning problem
     /**
-     * test to get distinct words, search a random word in the api and check if the result size is bigger than 0
+     * set up the using environment for all methods
      * @author Ziran Cao
-     * @version v1
+     * @version v2
+     */
+    @BeforeEach
+    public void setUp() throws Exception{  //Guice.createInjector(new TextEditorModule());
+        injector = Guice.createInjector(new AbstractModule() {
+            @Override
+            protected void configure() {
+                bind(DistWordDescInter.class).to(DistWordDesc.class);
+                bind(ProfileInter.class).to(Profile.class);
+                bind(RedditExtraInter.class).to(RedditExtractor.class);
+            }
+        });
+    }
+
+    /**
+     * clear up the using environment for all methods
+     * @author Ziran Cao
+     * @version v2
+     */
+    @AfterEach
+    public void tearDown() throws Exception {
+        injector = null;
+    }
+
+    /**
+     * use a wrapper class to call and mock the api
+     * @author Ziran Cao
+     * @version v2
      */
     @Test
     void desDistWdCount() {
-        List<List<String>> arrayNode = new DistWordDesc().desDistWdCount("trump", 100);
-        assertTrue(arrayNode.size()>0);
+        RedditExtractorWrapper editor = injector.getInstance(RedditExtractorWrapper.class);  //new RedditExtractorMock();//
+        List<List<String>>result = editor.mockGetAPI();
+        assertEquals("trump",result.get(2).get(0));
     }
+
 }

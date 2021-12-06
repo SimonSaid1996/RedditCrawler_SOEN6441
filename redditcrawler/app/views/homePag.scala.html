@@ -1,7 +1,5 @@
-@()
+@(searchKey:String)
 
-	@import models.RedditSearchResult
-	@import models.SingleSubmission
 	@main("RedditLytics") {
 
 	<div class="col-sm-12"><br></br></div>
@@ -9,8 +7,9 @@
 		<h1 class="heading-center" style=" text-align:center;">Welcome to RedditLytics! </h1>
 		<div class="col-sm-12"><br></br></div>
 	</div>
+	@searchKey
 	<script src="@routes.Assets.versioned("javascripts/search.js")"></script>
-
+	<script src="@routes.Assets.versioned("javascripts/search.js")">websocetsearch("searchKey");</script>
 
 	<div id="ine"></div>
 

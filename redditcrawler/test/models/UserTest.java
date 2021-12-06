@@ -90,10 +90,6 @@ class UserTest {
 
     }
 
-    /*@Test
-    void appendCache() {
-    }*/
-
     /**
      * Tests keepLatestTenResults function
      * @author Ziran Cao

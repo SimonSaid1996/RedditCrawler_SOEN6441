@@ -1,6 +1,12 @@
 package models;
 
-public class ProfileDetail {
+import Interface.ProfileDetaInter;
+
+/**
+ * The class represents Author's descriptions in reddit and would get and set the data related to that
+ * @author Pouya Zargaran
+ */
+public class ProfileDetail implements ProfileDetaInter {
     String name ;
     boolean verified ;
     int total_karma;
@@ -11,6 +17,19 @@ public class ProfileDetail {
     String id ;
     String description;
 
+    /**
+     * Constractor
+     * @author Pouya Zargaran
+     * @param id
+     * @param description The description that Author wrote on reddit about it self
+     * @param verified boolean that indicates if the Author verified its acc on the reddit website
+     * @param total_karma the summation of all kind of karma point
+     * @param name The user name that author has in reddit wabsite
+     * @param post_karma
+     * @param comment_karma
+     * @param awarder_karma
+     * @param awardedee_karma
+     */
     public ProfileDetail(String name, boolean verified, int total_karma, int comment_karma, int post_karma, int awarder_karma, int awardedee_karma, String id, String description) {
         this.name = name;
         this.verified = verified;

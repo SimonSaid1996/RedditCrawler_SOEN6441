@@ -1,11 +1,13 @@
 package controllers;
 
+import akka.actor.ActorSystem;
 import models.RedditExtractor;
 import models.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import play.mvc.Result;
+import play.mvc.WebSocket;
 
 import java.util.concurrent.CompletionStage;
 
@@ -17,6 +19,8 @@ import static org.junit.jupiter.api.Assertions.*;
  * @version v1
  */
 class HomeControllerTest {
+    @com.google.inject.Inject private ActorSystem actorSystem;
+
     /**
      * make initialization before creating the class
      * @author Ziran Cao
@@ -43,31 +47,8 @@ class HomeControllerTest {
      */
     @Test
     void homeScreen() {
-        Result r = new HomeController().homeScreen();
-        assertTrue(r.toString().length()>0);
-    }
-    /**
-     * testing searching with a keyword
-     * @author Ziran Cao
-     * @version v1
-     */
-    @Test
-    void search() {        //maybe need to test with get? ask for details
-        //need to set some data first, then use the homecontroller
-        CompletionStage<Result> result = new HomeController().search("trump--guid250100646453736950463869537365");
-        Result r = result.toCompletableFuture().join();
-        assertTrue(r.toString().length()>0);
-    }
-
-    /**
-     * testing the wrapper function
-     * @author Ziran Cao
-     * @version v1
-     */
-    @Test
-    void renderHelper() {   //just for testing
-        User X = new User();
-        Result r = new HomeController().renderHelper(X);
+        actorSystem = ActorSystem.create();
+        Result r = new HomeController(actorSystem).homeScreen();
         assertTrue(r.toString().length()>0);
     }
 
@@ -78,7 +59,8 @@ class HomeControllerTest {
      */
     @Test
     void distWord() {
-        CompletionStage<Result> result = new HomeController().DistWord("trump");
+        actorSystem = ActorSystem.create();
+        CompletionStage<Result> result = new HomeController(actorSystem).DistWord("trump");
         Result r = result.toCompletableFuture().join();
         assertTrue(r.toString().length()>0);
     }
@@ -89,7 +71,8 @@ class HomeControllerTest {
      */
     @Test
     void partA() {
-        CompletionStage<Result> result = new HomeController().PartA("TweetArchiveBot");
+        actorSystem = ActorSystem.create();
+        CompletionStage<Result> result = new HomeController(actorSystem).PartA("TweetArchiveBot");
         Result r = result.toCompletableFuture().join();
         assertTrue(r.toString().length()>0);
     }
@@ -100,9 +83,16 @@ class HomeControllerTest {
      */
     @Test
     void partC_subredditSearch() {   //for testing
-        CompletionStage<Result> result = new HomeController().PartC_subredditSearch("rosin");
+        actorSystem = ActorSystem.create();
+        CompletionStage<Result> result = new HomeController(actorSystem).PartC_subredditSearch("rosin");
         Result r = result.toCompletableFuture().join();
         assertTrue(r.toString().length()>0);
     }
 
+    @Test
+    void websocket (){
+        actorSystem = ActorSystem.create();
+        new HomeController(actorSystem).socket();
+        assertTrue(true);
+    }
 }

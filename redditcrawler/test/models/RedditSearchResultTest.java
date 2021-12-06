@@ -35,6 +35,7 @@ class RedditSearchResultTest {
         test.add(sin);
         RedditSearchResult re = new RedditSearchResult();
         re.setResults(test);
+        System.out.println(re);
         assertNotNull(re.getResults());
     }
     /**

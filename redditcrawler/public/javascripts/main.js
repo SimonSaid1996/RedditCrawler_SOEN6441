@@ -17,19 +17,3 @@ function getType(form) {
 	
 	return form.action = absoluteUrl;
 }
-
-
-
-function getDistWord(form){
-	
-	const absoluteUrl = "http://localhost:9000";
-	
-	
-	
-	if(guid) {
-		return form.action = absoluteUrl+"/DistW/"+guid;
-	}
-	
-	return form.action = absoluteUrl;
-
-}

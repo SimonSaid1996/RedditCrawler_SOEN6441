@@ -1,8 +1,14 @@
 package models;
 
+import Interface.RedditSearInter;
+
 import java.util.List;
 
-public class RedditSearchResult {
+/**
+ * a model class representing the search results for the search key
+ * @author Pooya Zaragaran
+ */
+public class RedditSearchResult implements RedditSearInter {
     
 	private String searchKey;
     private List<SingleSubmission> results;

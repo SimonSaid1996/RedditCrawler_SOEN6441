@@ -1,103 +1,95 @@
 package controllers;
-import java.util.List;
 
+import actor.*;
+import akka.actor.ActorRef;
+import akka.actor.ActorSystem;
+import akka.stream.Materializer;
+import com.google.inject.Inject;
 import models.*;
-import play.data.*;
+import play.libs.streams.ActorFlow;
 import play.mvc.*;
+import scala.compat.java8.FutureConverters;
+
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
+import static akka.pattern.Patterns.ask;
 
-//coverage 代码实在不红的话就写一行，改成绿的就行
 public class HomeController extends Controller {
-    //testing case needs alt+space, then create the test cases, below web will explain     
-	//https://www.jetbrains.com/help/idea/create-tests.html
-	
 
-    /**
-     * Home page for waiting the user input.
-     */
-    public Result homeScreen() {
-        return ok(views.html.homePage.render());
-    }
-	
-	
-	    /**
-     * Print out target user latest 10 tweets asynchronously with their name, picture and location.
-     * @author Ziran Cao and Yugansh Goyal
-     * @param args - A string containing the searchkey and the userId passed from main.js
-     * @return 10 newst reddit results, name, picture image, location
-     * @version v1
-     */
 	/**
-     * Searching method for asynchronously get latest ...
-     */
-	//public Result search(String args){ 
-	public CompletionStage<Result> search(String args){
-		
-		String[] parts = args.split("--guid");
-		String searchKey = parts[0];
-		String userId = parts[1];
-		
-		User user = Users.getUser(userId);
-		
-        RedditExtractor extractorthread = new RedditExtractor(user);
-        //extractorthread.getLatestSubmissions(searchKey);
-		
-		return extractorthread.getLatestSubmissions(searchKey).thenApplyAsync( dummyV->renderHelper(user) );
-		//return ok(views.html.searchResultPage.render(user.getCache()));
-        //return redirect(controllers.routes.HomeController.homeScreen());
-		
-    }
+	 * ActorSystem Object
+	 */
+	@com.google.inject.Inject private ActorSystem actorSystem;
+	/**
+	 *Materializer Object
+	 */
+	@com.google.inject.Inject private Materializer materializer;
 
-	    /**
-     * a wrapper method to help rerendering the search method,no data changing here
-     * @author Ziran Cao
-     * @return rerendered version of the searched result page
-     */
-	public Result renderHelper(User user){
-		// a wrapper function to help rerender because required for lambda function to be used in thenapplysymc
-		return ok(views.html.searchResultPage.render(user.getCache()));
+
+	public static ActorRef s;
+	private final ActorRef profileActor;
+	private final ActorRef disWActor;
+	@Inject
+	public HomeController(ActorSystem system) {
+		s = system.actorOf(UserManager.props(),"Supervisor");
+		profileActor=system.actorOf(ProfileActor.props());
+		disWActor = system.actorOf(DistWActor.props());
 	}
 
+	public static ActorRef getS() {
+		return s;
+	}
 
-//////////////////////start, modified the function and added comments, might need to modify the comments later after getting the searchkey by Yugansh
+	/**
+	* Home page for waiting the user input.
+	* @author All
+	*/
+    public Result homeScreen() { return ok(views.html.homePage.render()); }
+
+//	public Result homeScreenWithSearch(String search) {
+//		System.out.println(search+"-------------");
+//    	return ok(views.html.homePag.render(search));
+//	}
+
+
     /**
      * use a key word to retrieve 250 newest results and count the unique words in descending order
      * @author Ziran Cao
-     * @param args - a variable from url which contains both userId and the searchKey
+     * @param searchKey - a variable from url which contains both userId and the searchKey
      * @return a list of list<string> wrapped within the completionstage to finish processing
-     * @version v1
      */
-
-    //create a href link and link it to the routes, make my own part of function
-    //public Result DistWord(){   //original
     public CompletionStage<Result> DistWord( String searchKey ){
-        //String searchKey = "trump";
 
-        //RedditSearchResult curRed = user.findKWordRed(searchKey);
+		return FutureConverters.toJava(ask(disWActor,new DistWActor.SearchWordKey(searchKey),10000))
+				.thenApply(r->ok(views.html.searchResultDistWord.render( (List<List<String>>) r)));
 
-        //System.out.println(curRed);
-		RedditExtractor extractorthread = new RedditExtractor();
-		
-        return  extractorthread.getDistW(searchKey,250).thenApplyAsync(reds ->ok(views.html.searchResultDistWord.render(reds)));
-    }
-	
-	public CompletableFuture<Result> PartA(String profileName){
+	}
 
-        //each search is gonna create a diff user here, think abt how to move the user to the session
+	/**
+	 * First the function would an object of the Profile and fetch datas needed and send the datas to view
+	 * @author Pouya Zargaran
+	 * @param profileName The String containing author's name that been sent from view when user clicked on the authors name
+	 * @return object of profile contain info about author and its last 10 submission to be shown on view
+	 */
+	public CompletionStage<Result> PartA(String profileName){
 
-        //if user is null, then do so
-		//        RedditExtractor extractorthread = new RedditExtractor();
-		//        Profile profile = new Profile(profileName);
-
-
-        return new Profile(profileName).getData().thenApplyAsync(r->ok(views.html.searchResultProfile.render(r)));
+//        return new Profile(profileName).getData().thenApplyAsync(r->ok(views.html.searchResultProfile.render(r)));
+		return FutureConverters.toJava(ask(profileActor,new ProfileActor.ProfileQuery(profileName),10000))
+				.thenApply(r->ok(views.html.searchResultProfile.render((Profile) r)));
 
     }
+
+
 	
+	/**
+	 * Controller method to display the 10 latest submissions of a particular subreddit
+	 * @author Yugansh Goyal
+	 * @param Subreddit - A string containing the subreddit name
+	 * @return 10 latest reddit submissions having author, title of the particular subreddit
+	 */
 	public CompletableFuture<Result> PartC_subredditSearch(String Subreddit){
-	
 		/**
 		* Not taking in userid or searchkey
 		*user - it does not make sense to store it in cache (we would have to update if user clicks on the subreddit again), so no userid
@@ -107,9 +99,20 @@ public class HomeController extends Controller {
         RedditExtractor extractorthread = new RedditExtractor();
 
         return extractorthread.PartC_getSubredditSubmissions(Subreddit).thenApplyAsync(results->ok(views.html.searchResultSubreddit.render(results)));
-        //return ok(views.html.searchResultSubreddit.render(extractorthread.PartC_getSubredditSubmissions(Subreddit)));
-
     }
+
+
+//    ------------------------------------------------WEB SOCKET---------------------------------------------------------------------
+
+	public WebSocket socket (){
+
+//		return WebSocket.Text.accept(request -> ActorFlow.actorRef(Supervisor::props, actorSystem, materializer));
+//		return WebSocket.Text.accept(request -> s.tell(request,ActorRef.noSender()));
+		System.out.println("in the controller");
+		System.out.println("ccccccccccccccccccccccccccccccccccccccccccccccc");
+		return WebSocket.Text.accept(request -> ActorFlow.actorRef(WorkerActor::props, actorSystem, materializer));
+
+	}
 
 }
 
